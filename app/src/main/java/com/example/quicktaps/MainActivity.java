@@ -2,6 +2,7 @@ package com.example.quicktaps;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -26,8 +27,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View view) {
         switch (view.getId()) {
             case(R.id.start):
-                title.setText("HelloWorld");
+                Intent intentLevel = new Intent(getApplication(), GameLevel.class);
+                startActivity(intentLevel);
             case(R.id.score):
+                Intent intentScore = new Intent(getApplication(), HighScore.class);
+                startActivity(intentScore);
         }
      }
+
 }
