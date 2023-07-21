@@ -7,11 +7,14 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 
 public class GameAction3 extends AppCompatActivity implements View.OnClickListener {
     private Button b1;
@@ -24,9 +27,16 @@ public class GameAction3 extends AppCompatActivity implements View.OnClickListen
     private Button b8;
     private Button b9;
 
+    private TextView textTime;
+    private final SimpleDateFormat date = new SimpleDateFormat("mm:ss:SS", Locale.JAPAN);
+    private int count;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        count = 1;
+
         setContentView(R.layout.activity_game_action3);
         b1 = findViewById(R.id.button1);
         b1.setOnClickListener(this);
@@ -47,7 +57,6 @@ public class GameAction3 extends AppCompatActivity implements View.OnClickListen
         b9 = findViewById(R.id.button9);
         b9.setOnClickListener(this);
 
-
         ((Button)findViewById(R.id.button1)).setOnClickListener(this);
         ((Button)findViewById(R.id.button2)).setOnClickListener(this);
         ((Button)findViewById(R.id.button3)).setOnClickListener(this);
@@ -59,6 +68,9 @@ public class GameAction3 extends AppCompatActivity implements View.OnClickListen
         ((Button)findViewById(R.id.button9)).setOnClickListener(this);
         ((Button)findViewById(R.id.buttonHome)).setOnClickListener(this);
         ((Button)findViewById(R.id.buttonRetry)).setOnClickListener(this);
+
+        textTime = (TextView)findViewById(R.id.textTime);
+        textTime.setText(date.format(0));
 
         List<String> number = new ArrayList<String>();
         number.add("1");
@@ -83,23 +95,81 @@ public class GameAction3 extends AppCompatActivity implements View.OnClickListen
         b9.setText(number.get(8));
     }
 
+    public void transitionToScoreZone() {
+        if (count == 10) {
+            Intent intentScore = new Intent(getApplication(), ScoreZone.class);
+            startActivity(intentScore);
+        }
+    }
+
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case (R.id.button1): break;
-            case (R.id.button2): break;
-            case (R.id.button3): break;
-            case (R.id.button4): break;
-            case (R.id.button5): break;
-            case (R.id.button6): break;
-            case (R.id.button7): break;
-            case (R.id.button8): break;
-            case (R.id.button9): break;
+            case (R.id.button1):
+                if (b1.getText().toString().equals("" + count)) {
+                    b1.setVisibility(View.INVISIBLE);
+                    count += 1;
+                }
+                break;
+            case (R.id.button2):
+                if (b2.getText().toString().equals("" + count)) {
+                    b2.setVisibility(View.INVISIBLE);
+                    count += 1;
+                }
+                break;
+            case (R.id.button3):
+                if (b3.getText().toString().equals("" + count)) {
+                    b3.setVisibility(View.INVISIBLE);
+                    count += 1;
+                }
+                break;
+            case (R.id.button4):
+                if (b4.getText().toString().equals("" + count)) {
+                    b4.setVisibility(View.INVISIBLE);
+                    count += 1;
+                }
+                break;
+            case (R.id.button5):
+                if (b5.getText().toString().equals("" + count)) {
+                    b5.setVisibility(View.INVISIBLE);
+                    count += 1;
+                }
+                break;
+            case (R.id.button6):
+                if (b6.getText().toString().equals("" + count)) {
+                    b6.setVisibility(View.INVISIBLE);
+                    count += 1;
+                }
+                break;
+            case (R.id.button7):
+                if (b7.getText().toString().equals("" + count)) {
+                    b7.setVisibility(View.INVISIBLE);
+                    count += 1;
+                }
+                break;
+            case (R.id.button8):
+                if (b8.getText().toString().equals("" + count)) {
+                    b8.setVisibility(View.INVISIBLE);
+                    count += 1;
+                }
+                break;
+            case (R.id.button9):
+                if (b9.getText().toString().equals("" + count)) {
+                    b9.setVisibility(View.INVISIBLE);
+                    count += 1;
+                }
+                break;
             case (R.id.buttonHome):
                 Intent intentHome = new Intent(getApplication(), MainActivity.class);
                 startActivity(intentHome);
                 break;
-            case (R.id.buttonRetry): break;
+            case (R.id.buttonRetry):
+                Intent retry = new Intent(getApplication(), GameAction3.class);
+                startActivity(retry);
+                break;
         }
+        transitionToScoreZone();
     }
+
+
 }
