@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -16,7 +18,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
-public class GameAction3 extends AppCompatActivity implements View.OnClickListener {
+public class GameAction3 extends AppCompatActivity implements Runnable, View.OnClickListener {
     private Button b1;
     private Button b2;
     private Button b3;
@@ -28,7 +30,9 @@ public class GameAction3 extends AppCompatActivity implements View.OnClickListen
     private Button b9;
 
     private TextView textTime;
+    private final Handler handler = new Handler(Looper.getMainLooper());
     private final SimpleDateFormat date = new SimpleDateFormat("mm:ss:SS", Locale.JAPAN);
+    private volatile boolean timephase = false;
     private int count;
 
     @Override
@@ -103,6 +107,30 @@ public class GameAction3 extends AppCompatActivity implements View.OnClickListen
     }
 
     @Override
+    public void run() {
+        int period = 10;
+        while (!timephase) {
+            try {
+                Thread.sleep(period);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+                timephase = true;
+            }
+
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    long endTime = System.currentTimeMillis();
+                    long newTime = (endTime - startTime);
+
+                    textTime.setText(date.format());
+                }
+            })
+        }
+
+    }
+
+    @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case (R.id.button1):
@@ -170,6 +198,5 @@ public class GameAction3 extends AppCompatActivity implements View.OnClickListen
         }
         transitionToScoreZone();
     }
-
 
 }
