@@ -28,12 +28,14 @@ public class GameAction3 extends AppCompatActivity implements Runnable, View.OnC
     private Button b7;
     private Button b8;
     private Button b9;
+    private Button startBtn;
 
     private TextView textTime;
     private final Handler handler = new Handler(Looper.getMainLooper());
     private final SimpleDateFormat date = new SimpleDateFormat("mm:ss:SS", Locale.JAPAN);
     private volatile boolean timephase = false;
     private int count;
+    private long startTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +62,8 @@ public class GameAction3 extends AppCompatActivity implements Runnable, View.OnC
         b8.setOnClickListener(this);
         b9 = findViewById(R.id.button9);
         b9.setOnClickListener(this);
+        startBtn = findViewById(R.id.buttonStart);
+        startBtn.setOnClickListener(this);
 
         ((Button)findViewById(R.id.button1)).setOnClickListener(this);
         ((Button)findViewById(R.id.button2)).setOnClickListener(this);
@@ -101,37 +105,16 @@ public class GameAction3 extends AppCompatActivity implements Runnable, View.OnC
 
     public void transitionToScoreZone() {
         if (count == 10) {
+            timephase = true;
             Intent intentScore = new Intent(getApplication(), ScoreZone.class);
+            intentScore.putExtra("name", textTime.getText().toString());
             startActivity(intentScore);
         }
     }
 
     @Override
-    public void run() {
-        int period = 10;
-        while (!timephase) {
-            try {
-                Thread.sleep(period);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-                timephase = true;
-            }
-
-            handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    long endTime = System.currentTimeMillis();
-                    long newTime = (endTime - startTime);
-
-                    textTime.setText(date.format());
-                }
-            })
-        }
-
-    }
-
-    @Override
     public void onClick(View view) {
+        Thread thread;
         switch (view.getId()) {
             case (R.id.button1):
                 if (b1.getText().toString().equals("" + count)) {
@@ -187,6 +170,13 @@ public class GameAction3 extends AppCompatActivity implements Runnable, View.OnC
                     count += 1;
                 }
                 break;
+            case (R.id.buttonStart):
+                startBtn.setVisibility(View.INVISIBLE);
+                timephase = false;
+                thread = new Thread(this);
+                thread.start();
+                startTime = System.currentTimeMillis();
+                break;
             case (R.id.buttonHome):
                 Intent intentHome = new Intent(getApplication(), MainActivity.class);
                 startActivity(intentHome);
@@ -197,6 +187,29 @@ public class GameAction3 extends AppCompatActivity implements Runnable, View.OnC
                 break;
         }
         transitionToScoreZone();
+    }
+
+    @Override
+    public void run() {
+        int period = 10;
+        while (!timephase) {
+            try {
+                Thread.sleep(period);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+                timephase = true;
+            }
+
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    long endTime = System.currentTimeMillis();
+                    long nowTime = (endTime - startTime);
+
+                    textTime.setText(date.format(nowTime));
+                }
+            });
+        }
     }
 
 }
