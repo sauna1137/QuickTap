@@ -106,9 +106,9 @@ public class GameAction3 extends AppCompatActivity implements Runnable, View.OnC
     public void transitionToScoreZone() {
         if (count == 10) {
             timephase = true;
-            Intent intentScore = new Intent(getApplication(), ScoreZone.class);
-            intentScore.putExtra("name", textTime.getText().toString());
-            startActivity(intentScore);
+//            Intent intentScore = new Intent(getApplication(), ScoreZone.class);
+//            intentScore.putExtra("name", textTime.getText().toString());
+//            startActivity(intentScore);
         }
     }
 
@@ -182,8 +182,12 @@ public class GameAction3 extends AppCompatActivity implements Runnable, View.OnC
                 startActivity(intentHome);
                 break;
             case (R.id.buttonRetry):
-                Intent retry = new Intent(getApplication(), GameAction3.class);
-                startActivity(retry);
+//                Intent retry = new Intent(getApplication(), GameAction3.class);
+//                startActivity(retry);
+
+                Intent intentScore = new Intent(getApplication(), ScoreZone.class);
+                intentScore.putExtra("score", textTime.getText().toString());
+                startActivity(intentScore);
                 break;
         }
         transitionToScoreZone();

@@ -43,6 +43,29 @@
             android:gravity="center"/>
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:weightSum="2">
+
+        <Button
+            android:id="@+id/buttonHome"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Home"
+            android:backgroundTint="#0892d0"/>
+
+        <Button
+            android:id="@+id/buttonRetry"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="RETRY"
+            android:backgroundTint="#0892d0"/>
+    </LinearLayout>
+
 
 
 </LinearLayout>
