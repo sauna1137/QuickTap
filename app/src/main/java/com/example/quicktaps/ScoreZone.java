@@ -3,15 +3,20 @@ package com.example.quicktaps;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
 import org.w3c.dom.Text;
 
+import java.util.prefs.PreferenceChangeEvent;
+
 public class ScoreZone extends AppCompatActivity implements View.OnClickListener {
 
+    public SharedPreferences pref;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -19,14 +24,36 @@ public class ScoreZone extends AppCompatActivity implements View.OnClickListener
         Intent intent = getIntent();
         String score = intent.getStringExtra("score");
 
+        pref = PreferenceManager.getDefaultSharedPreferences(this);
+        TextView timeTitle = (TextView)findViewById(R.id.timeTitle);
         TextView textNew = (TextView)findViewById(R.id.textNew);
         TextView textScore = (TextView)findViewById(R.id.textScore);
         TextView textTime = (TextView)findViewById(R.id.textTime);
 
-        textTime.setText(score);
-
         ((Button)findViewById(R.id.buttonHome)).setOnClickListener(this);
         ((Button)findViewById(R.id.buttonRetry)).setOnClickListener(this);
+
+        timeTitle.setText(score);
+        String score1 = pref.getString("score1", "");
+        textTime.setText(score1);
+
+        int m = Integer.parseInt(score.substring(0,2));
+        int s = Integer.parseInt(score.substring(3,5));
+        int ms = Integer.parseInt(score.substring(6,8));
+
+        int m1 = Integer.parseInt(score1.substring(0,2));
+        int s1 = Integer.parseInt(score1.substring(3,5));
+        int ms1 = Integer.parseInt(score1.substring(6,8));
+
+        if (m <= m1) {
+            if(s <= s1) {
+                if(ms <= ms1) {
+                    SharedPreferences.Editor edit = pref.edit();
+                    edit.putString("score1", score);
+                    edit.commit();
+                }
+            }
+        }
     }
 
     @Override

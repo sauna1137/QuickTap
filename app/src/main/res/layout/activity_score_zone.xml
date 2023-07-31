@@ -11,6 +11,14 @@
         android:layout_width="match_parent"
         android:layout_height="150dp" />
 
+    <TextView
+        android:id="@+id/textTime"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:text="TIME"
+        android:textSize="50dp"
+        android:gravity="center" />
+
     <LinearLayout
         android:layout_width="300dp"
         android:layout_height="300dp"
@@ -35,7 +43,7 @@
             android:gravity="center"/>
 
         <TextView
-            android:id="@+id/textTime"
+            android:id="@+id/timeTitle"
             android:layout_width="match_parent"
             android:layout_height="100dp"
             android:textSize="30dp"

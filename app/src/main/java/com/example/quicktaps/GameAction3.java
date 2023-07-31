@@ -3,17 +3,16 @@ package com.example.quicktaps;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
@@ -29,13 +28,18 @@ public class GameAction3 extends AppCompatActivity implements Runnable, View.OnC
     private Button b8;
     private Button b9;
     private Button startBtn;
+    private Button finishBtn;
+    private Button homeBtn;
+    private Button retryBtn;
 
     private TextView textTime;
     private final Handler handler = new Handler(Looper.getMainLooper());
     private final SimpleDateFormat date = new SimpleDateFormat("mm:ss:SS", Locale.JAPAN);
-    private volatile boolean timephase = false;
+    private volatile boolean timePhase = false;
+    private volatile boolean startPhase = false;
     private int count;
     private long startTime;
+    private SharedPreferences pref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,7 +67,10 @@ public class GameAction3 extends AppCompatActivity implements Runnable, View.OnC
         b9 = findViewById(R.id.button9);
         b9.setOnClickListener(this);
         startBtn = findViewById(R.id.buttonStart);
-        startBtn.setOnClickListener(this);
+        finishBtn = findViewById(R.id.buttonEnd);
+        finishBtn.setVisibility(View.INVISIBLE);
+        homeBtn = findViewById(R.id.buttonHome);
+        retryBtn = findViewById(R.id.buttonRetry);
 
         ((Button)findViewById(R.id.button1)).setOnClickListener(this);
         ((Button)findViewById(R.id.button2)).setOnClickListener(this);
@@ -76,6 +83,8 @@ public class GameAction3 extends AppCompatActivity implements Runnable, View.OnC
         ((Button)findViewById(R.id.button9)).setOnClickListener(this);
         ((Button)findViewById(R.id.buttonHome)).setOnClickListener(this);
         ((Button)findViewById(R.id.buttonRetry)).setOnClickListener(this);
+        finishBtn.setOnClickListener(this);
+        startBtn.setOnClickListener(this);
 
         textTime = (TextView)findViewById(R.id.textTime);
         textTime.setText(date.format(0));
@@ -105,7 +114,10 @@ public class GameAction3 extends AppCompatActivity implements Runnable, View.OnC
 
     public void transitionToScoreZone() {
         if (count == 10) {
-            timephase = true;
+            timePhase = true;
+            finishBtn.setVisibility(View.VISIBLE);
+            homeBtn.setVisibility(View.INVISIBLE);
+            retryBtn.setVisibility(View.INVISIBLE);
 //            Intent intentScore = new Intent(getApplication(), ScoreZone.class);
 //            intentScore.putExtra("name", textTime.getText().toString());
 //            startActivity(intentScore);
@@ -117,54 +129,63 @@ public class GameAction3 extends AppCompatActivity implements Runnable, View.OnC
         Thread thread;
         switch (view.getId()) {
             case (R.id.button1):
+                if (!startPhase) break;
                 if (b1.getText().toString().equals("" + count)) {
                     b1.setVisibility(View.INVISIBLE);
                     count += 1;
                 }
                 break;
             case (R.id.button2):
+                if (!startPhase) break;
                 if (b2.getText().toString().equals("" + count)) {
                     b2.setVisibility(View.INVISIBLE);
                     count += 1;
                 }
                 break;
             case (R.id.button3):
+                if (!startPhase) break;
                 if (b3.getText().toString().equals("" + count)) {
                     b3.setVisibility(View.INVISIBLE);
                     count += 1;
                 }
                 break;
             case (R.id.button4):
+                if (!startPhase) break;
                 if (b4.getText().toString().equals("" + count)) {
                     b4.setVisibility(View.INVISIBLE);
                     count += 1;
                 }
                 break;
             case (R.id.button5):
+                if (!startPhase) break;
                 if (b5.getText().toString().equals("" + count)) {
                     b5.setVisibility(View.INVISIBLE);
                     count += 1;
                 }
                 break;
             case (R.id.button6):
+                if (!startPhase) break;
                 if (b6.getText().toString().equals("" + count)) {
                     b6.setVisibility(View.INVISIBLE);
                     count += 1;
                 }
                 break;
             case (R.id.button7):
+                if (!startPhase) break;
                 if (b7.getText().toString().equals("" + count)) {
                     b7.setVisibility(View.INVISIBLE);
                     count += 1;
                 }
                 break;
             case (R.id.button8):
+                if (!startPhase) break;
                 if (b8.getText().toString().equals("" + count)) {
                     b8.setVisibility(View.INVISIBLE);
                     count += 1;
                 }
                 break;
             case (R.id.button9):
+                if (!startPhase) break;
                 if (b9.getText().toString().equals("" + count)) {
                     b9.setVisibility(View.INVISIBLE);
                     count += 1;
@@ -172,7 +193,8 @@ public class GameAction3 extends AppCompatActivity implements Runnable, View.OnC
                 break;
             case (R.id.buttonStart):
                 startBtn.setVisibility(View.INVISIBLE);
-                timephase = false;
+                startPhase = true;
+                timePhase = false;
                 thread = new Thread(this);
                 thread.start();
                 startTime = System.currentTimeMillis();
@@ -190,18 +212,20 @@ public class GameAction3 extends AppCompatActivity implements Runnable, View.OnC
                 startActivity(intentScore);
                 break;
         }
-        transitionToScoreZone();
+        if (startPhase == true) {
+            transitionToScoreZone();
+        }
     }
 
     @Override
     public void run() {
         int period = 10;
-        while (!timephase) {
+        while (!timePhase) {
             try {
                 Thread.sleep(period);
             } catch (InterruptedException e) {
                 e.printStackTrace();
-                timephase = true;
+                timePhase = true;
             }
 
             handler.post(new Runnable() {
